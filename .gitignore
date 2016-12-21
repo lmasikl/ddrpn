@@ -1,0 +1,6 @@
+tmp
+*.sqlite3
+*.pyc
+node_modules
+env
+bundles
