@@ -1,5 +1,4 @@
-{% load static %}
-{% load render_bundle from webpack_loader %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -9,16 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache" />
     <meta http-equiv="Pragma" content="no-cache" />
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
   <body>
     <div id="container"></div>
-    {% render_bundle 'main' %}
-    {% comment %}
-    <!-- <script src="{% static 'dashboard.js' %}"></script> -->
     <script src="{% static 'app.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
-    <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
-    {% endcomment %}
   </body>
 </html>

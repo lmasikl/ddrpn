@@ -1,14 +1,13 @@
 import os
 
+from dashboard.local_settings import DATABASES, DEBUG # NOQA
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 SECRET_KEY = 'w6_zqn#b8clqh#ryk9l(i%b4huwcf&k!oh6g&vm2x@wys-(y_&'
 
-DEBUG = True
-
 ALLOWED_HOSTS = []
-
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -19,7 +18,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
-    'webpack_loader',
+    'rest_framework_swagger',
+
+    'django_extensions',
 
     'users',
 ]
@@ -57,6 +58,7 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
@@ -70,15 +72,6 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -113,17 +106,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-else:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
-        os.path.join(BASE_DIR, 'assets'),
-    )
 
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-    }
-}
+# if not DEBUG:
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# else:
+#     STATICFILES_DIRS = (
+#         os.path.join(BASE_DIR, 'static'),
+#         os.path.join(BASE_DIR, 'assets'),
+#     )
