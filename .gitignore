@@ -4,3 +4,6 @@ tmp
 node_modules
 env
 bundles
+*.log
+.env
+.idea

@@ -1,0 +1,45 @@
+@import "settings"
+// @import "normalize"
+// @import "mixins"
+// @import "reboot"
+// @import "type"
+// @import "images"
+// @import "code"
+// @import "grid"
+
+@import "app_mixins"
+
+html, body, #app
+  height: 100%
+
+.app
+  min-height: 100%
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+
+  &__header, &__footer
+    +inverse()
+    height: $header-height
+    line-height: $header-height
+    padding: 0 $grid-gutter-width
+
+  &__footer
+    text-align: center
+
+.content
+  padding-top: 60px
+
+.page-transition-enter
+  opacity: 0.01
+
+.page-transition-enter.page-transition-enter-active
+  opacity: 1
+  transition: opacity 0ms ease-in
+
+.page-transition-leave
+  opacity: 1
+
+.page-transition-leave.page-transition-leave-active
+  opacity: 0
+  transition: opacity 0ms ease-in

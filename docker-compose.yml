@@ -1,37 +1,61 @@
 version: "2"
 services:
-  postgres:
-    image: postgres:9.5
-    enviroment:
-      LC_ALL: C.UTF-8
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: dashboard
-    volumes:
-      - postgres-data:/var/lib/postgresql/data/
-      - postgres-conf:/etc/postgresql
-      - postgres-logs:/var/log//postgresql
-    networks:
-      - dashboard-network
-  dashboard:
-    build: .
-    command: supervisord
-    volumes:
-      - .:/code/
-      - .:/code/media
-    enviroment:
-      - C_FORCE_ROOT=true
-      - DB_PASSWORD: postgres
-      - DB_NAME: dashboard
-    ports:
-      - "8000:8000"
-    networks:
-      - dashboard-network
-    depends_on:
-      - postgres
+    postgres:
+        container_name: "postgres_${NAME}"
+        env_file:
+            - .env
+        image: postgres:9.5
+        environment:
+            LC_ALL: C.UTF-8
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
+        volumes:
+            - postgres-data:/var/lib/postgresql/data/
+            - postgres-conf:/etc/postgresql
+            - postgres-logs:/var/log//postgresql
+        networks:
+            - dashboard-network
+    dashboard:
+        container_name: "dashboard_${NAME}"
+        env_file:
+            - .env
+        build: .
+        command: /usr/local/bin/gunicorn dashboard.wsgi:application -w 2 -b 0.0.0.0:8000
+        volumes:
+            - .:/code
+            - ./media:/code/media
+            - ./static:/code/static
+        environment:
+            - C_FORCE_ROOT=true
+            # - DB_PASSWORD="${DB_PASSWORD}"
+            # - DB_NAME="${DB_NAME}"
+        expose:
+            - "8000"
+        networks:
+            - dashboard-network
+        depends_on:
+            - postgres
+    nginx:
+        container_name: "nginx_${NAME}"
+        image: nginx
+        env_file:
+            - .env
+        restart: always
+        ports:
+            - "80:80"
+        volumes:
+            - ./static:/www/static
+            - ./etc/nginx/conf.d:/etc/nginx/conf.d
+        volumes_from:
+            - dashboard
+        links:
+            - dashboard:dashboard
+        networks:
+            - dashboard-network
 volumes:
-  postgres-data:
-  postgres-conf:
-  postgres-logs:
+    postgres-data:
+    postgres-conf:
+    postgres-logs:
 networks:
-  dashboard-network:
-    driver: bridge
+    dashboard-network:
+        driver: bridge
