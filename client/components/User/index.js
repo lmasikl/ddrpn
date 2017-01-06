@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-// import { format_date } from '../../utils'
-
-import './style.sass'
 
 
 class User extends Component {
@@ -12,16 +9,22 @@ class User extends Component {
         username: ''
     };
 
-    loadArticle(user_id) {
-        fetch(`/api/v0/users/${user_id}/`)
-            .then(response => response.json())
-            .then(data => {
-                this.setState(data)
-            });
+    loadUser(user_id) {
+        fetch(
+            `/api/v0/users/${user_id}/`,
+            {
+                method: "GET",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + localStorage.token
+                }
+            }
+        ).then(response => response.json()).then(data => {this.setState(data)});
     }
 
     componentDidMount() {
-        this.loadArticle(this.props.params['user_id']);
+        this.loadUser(this.props.params['user_id']);
     }
 
     render(){
@@ -30,7 +33,7 @@ class User extends Component {
             <div className="user">
                 <h4 className="user__username">{ username }</h4>
                 <article dangerouslySetInnerHTML={ {__html: email} } />
-                <Link className="user__button" to="/">Все пользователи</Link>
+                <Link to="/">Все пользователи</Link>
             </div>
         );
     }

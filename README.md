@@ -29,5 +29,4 @@ ALTER USER "{DB_USER}" WITH PASSWORD '{DB_PASSWORD}';
 ```bash
 docker exec -it dashboard_{NAME} python manage.py migrate --noinput
 docker exec -it dashboard_{NAME} python manage.py createsuperuser
-docker exec -it dashboard_{NAME} python manage.py collectstatic --noinput
 ```

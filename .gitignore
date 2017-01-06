@@ -7,3 +7,4 @@ bundles
 *.log
 .env
 .idea
+static/app.js

@@ -7,6 +7,7 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.onHandleSubmit = this.onHandleSubmit.bind(this);
+        this.state = {}
     }
 
     onHandleSubmit(event) {
@@ -14,9 +15,16 @@ export default class Login extends Component {
         var username = this.refs.username.value
         var password = this.refs.password.value
         auth.login(username, password, (loggedIn) => {
-            console.log(loggedIn)
-            if (loggedIn) {
-                this.context.router.replace('/')
+            if (!loggedIn) {
+                return this.setState({ error: true })
+            }
+
+            const { location } = this.props
+
+            if (location.state && location.state.nextPathname) {
+                this.props.router.replace(location.state.nextPathname)
+            } else {
+                this.props.router.replace('/')
             }
         })
     }
@@ -42,7 +50,7 @@ export default class Login extends Component {
                             <div className="form-group">
                                 <input
                                     className="form-control"
-                                    type="text"
+                                    type="password"
                                     placeholder="password"
                                     defaultValue=""
                                     ref="password"
@@ -51,6 +59,9 @@ export default class Login extends Component {
                         </div>
                         <div className="panel-footer">
                             <Button type="submit" className="btn btn-primary btn-block" title="Войти" />
+                            {this.state.error && (
+                                <p>Bad login information</p>
+                            )}
                         </div>
                     </form>
                 </div>

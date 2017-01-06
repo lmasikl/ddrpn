@@ -13,7 +13,17 @@ export default class List extends Component {
 
     async loadUsers() {
         this.setState({
-            users: await fetch("/api/v0/users/").then(response =>response.json())
+            users: await fetch(
+                "/api/v0/users/",
+                {
+                    method: "GET",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Token ' + localStorage.token
+                    }
+                }
+            ).then(response =>response.json())
         })
     }
 

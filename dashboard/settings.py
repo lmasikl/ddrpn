@@ -1,6 +1,6 @@
 import os
 
-from local_settings import DATABASES, DEBUG # NOQA
+from dashboard.local_settings import DATABASES, DEBUG # NOQA
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -58,6 +58,7 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),

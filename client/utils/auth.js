@@ -1,8 +1,5 @@
 module.exports = {
     login: function(username, password, callback) {
-        console.log(username)
-        console.log(password)
-        console.log(localStorage)
         if (localStorage.token) {
             if (callback) {
                 callback(true)
@@ -23,8 +20,9 @@ module.exports = {
         })
     },
 
-    logout: function() {
+    logout: function(callback) {
         delete localStorage.token
+        this.onChange(false)
     },
 
     loggedIn: function() {
